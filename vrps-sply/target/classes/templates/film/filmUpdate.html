@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>资源新增</title>
+    <!--导入layui css文件-->
+    <link rel="stylesheet" href="/static/plugins/layui/css/layui.css">
+    <!--导入layui js文件-->
+    <script type="text/javascript" src="/static/plugins/layui/layui.js"></script>
+
+    <!--导入Jquery-->
+    <script type="text/javascript" src="/static/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.serializejson.js"></script>
+</head>
+<div class="layui-fluid" style="padding: 10px">
+    <div class="layui-card">
+        <form class="layui-form layui-card-header layuiadmin-card-header-auto hfits-search-area" id="collectLog">
+            <div class="layui-col-xs14">
+                <div class="layui-form-item">
+                    <input type="hidden" id="id" name="id" th:value="${film.id}">
+                    <label class="layui-form-label layui-required">片名</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="name" id="name" lay-verify="required" autocomplete="off"
+                               placeholder="请输入名称" th:value="${film.name}"
+                               class="layui-input">
+                    </div>
+                    <label class="layui-form-label layui-required">海报</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="image" id="image" lay-verify="required" autocomplete="off"
+                               placeholder="请输入海报链接" th:value="${film.image}"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label layui-required">上映年代</label>
+                    <div class="layui-input-inline">
+                        <select class="layui-select" name="onDecade" id="onDecade">
+                            <option th:each="item : ${decadeList}" th:value="${item.name}"
+                                    th:text="${item.name}" th:selected="${film.onDecade == item.name}"></option>
+                        </select>
+                    </div>
+                    <label class="layui-form-label layui-required">状态</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="status" id="status" lay-verify="required" autocomplete="off"
+                               placeholder="请输入状态" value="全集"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label layui-required">分辨率</label>
+                    <div class="layui-input-inline">
+                        <select id="resolution" name="resolution" lay-verify="required">
+                            <option value="1080" th:selected="${film.resolution == '1080'}">1080p</option>
+                            <option value="720"  th:selected="${film.resolution == '720'}">720p</option>
+                            <option value="480"  th:selected="${film.resolution == '480'}">480p</option>
+                        </select>
+                    </div>
+                    <label class="layui-form-label layui-required">演员</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="actor" id="actor" lay-verify="required" autocomplete="off"
+                               placeholder="请输入演员" th:value="${film.actor}"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label layui-required">目录</label>
+                    <div class="layui-input-inline">
+                        <select id="cataLogId" name="cataLogId" lay-filter="cataLogId" class="layui-select">
+                            <option th:each="item : ${cataLogList}" th:value="${item.id}"
+                                    th:text="${item.name}" th:selected="${film.cataLogId == item.id}"></option>
+                        </select>
+                    </div>
+                    <label class="layui-form-label layui-required">分类</label>
+                    <div class="layui-input-inline">
+                        <select id="subClassId" name="subClassId" class="layui-select">
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label layui-required">地区</label>
+                    <div class="layui-input-inline">
+                        <select id="locId" name="locId" class="layui-select">
+                            <option th:each="item : ${locList}" th:value="${item.id}" th:text="${item.name}"
+                                    th:selected="${film.locId == item.id}"></option>
+                        </select>
+                    </div>
+                    <label class="layui-form-label layui-required">视频格式</label>
+                    <div class="layui-input-inline">
+                        <select class="layui-select" id="format" name="format">
+                            <option value="1" th:selected="${film.format == '1'}">mp4</option>
+                            <option value="2" th:selected="${film.format == '2'}">webm</option>
+                            <option value="3" th:selected="${film.format == '3'}">ogv</option>
+                            <option value="4" th:selected="${film.format == '4'}">m3u8</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label layui-required">是否vip:</label>
+                    <div class="layui-input-inline">
+                        <select class="layui-select" id="isVip" name="isVip">
+                            <option value="1" th:selected="${film.isVip == '1'}">是</option>
+                            <option value="0" th:selected="${film.isVip == '0'}">否</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label layui-required">视频链接:</label>
+                    <div class="layui-input-block">
+                        <textarea id="link" name="link" class="layui-textarea" th:text="${film.link}"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label layui-required">剧情:</label>
+                    <div class="layui-input-block">
+                        <textarea class="layui-textarea" id="plot" name="plot" th:text="${film.plot}"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item" hidden>
+                <div class="layui-input-block">
+                    <button id="permissionSubmit" class="layui-btn" lay-submit lay-filter="*">
+                        保存
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script th:inline="javascript">
+    const film = [[${film}]];
+</script>
+<script>
+    layui.config({
+        base: '/static/plugins/layui/lay/modules/'
+    }).extend({}).use(['table', 'layer', 'form', 'laydate'], function () {
+        var form = layui.form;
+        var laydate = layui.laydate
+            , $ = layui.$
+            , table = layui.table
+            , layer = layui.layer;
+
+
+        form.on("select(cataLogId)", function (d) {
+            loadSubClass(d.value);
+        });
+        const id = $("#cataLogId").val();
+        loadSubClass(id);
+
+        form.render();
+        function loadSubClass(id) {
+            $.ajax({
+                type: 'POST',
+                url: '/film/change',
+                data: "id=" + id,
+                dataType: 'json',
+                success: function (data) {
+                    /*清空原有的选项*/
+                    $('#subClassId').empty();
+                    $.each(data, function (index, item) {
+                        //option 第一个参数是页面显示的值，第二个参数是传递到后台的值
+                        $('#subClassId').append(new Option(item.name, item.id));//往下拉菜单里添加元素
+                        //设置value（这个值就可以是在更新的时候后台传递到前台的值）为2的值为默认选中
+                    });
+                    $('#subClassId').val(film.subClassId);
+                    /*刷新表单，指定元素*/
+                    form.render('select');
+                },
+                error: function (data) {
+                    // 异常提示
+                    layer.msg('出现网络故障', {icon: 5});
+                    layer.closeAll('iframe'); //关闭弹框
+                }
+            });
+        }
+
+        form.on('submit', function (data) {
+            data.field.cataLogName = $("#cataLogId").find("option:selected").text();
+            data.field.locName = $("#locId").find("option:selected").text();
+            data.field.subClassName = $("#subClassId").find("option:selected").text();
+            $.ajax({
+                type: 'POST',
+                url: '/film/updateSave',
+                data: JSON.stringify(data.field),
+                dataType: 'json',
+                contentType: 'application/json; charset=UTF-8',
+                success: function (data) {
+                    if (data.falg) {
+                        // 成功提示框
+                        parent.layer.msg('修改成功', {icon: 6,});
+                        parent.layer.closeAll('iframe'); //关闭弹框
+                        window.parent.location.reload();
+                    } else {
+                        parent.layer.msg('修改失败', {icon: 5,});
+                    }
+                },
+                error: function (data) {
+                    // 异常提示
+                    parent.layer.msg('出现网络故障', {icon: 5});
+                    parent.layer.closeAll('iframe'); //关闭弹框
+                }
+            });
+            return false;
+        });
+
+    });
+</script>
+</body>
+</html>

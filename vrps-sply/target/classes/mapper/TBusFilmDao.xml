@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ly.vrps.common.dao.TBusFilmDao">
+  <resultMap id="BaseResultMap" type="com.ly.vrps.common.model.TBusFilm">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="actor" jdbcType="VARCHAR" property="actor" />
+    <result column="cata_log_name" jdbcType="VARCHAR" property="cataLogName" />
+    <result column="cata_log_id" jdbcType="VARCHAR" property="cataLogId" />
+    <result column="evaluation" jdbcType="DOUBLE" property="evaluation" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+    <result column="is_use" jdbcType="INTEGER" property="isUse" />
+    <result column="loc_name" jdbcType="VARCHAR" property="locName" />
+    <result column="loc_id" jdbcType="VARCHAR" property="locId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="on_decade" jdbcType="VARCHAR" property="onDecade" />
+    <result column="plot" jdbcType="VARCHAR" property="plot" />
+    <result column="resolution" jdbcType="VARCHAR" property="resolution" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="sub_class_name" jdbcType="VARCHAR" property="subClassName" />
+    <result column="sub_class_id" jdbcType="VARCHAR" property="subClassId" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="is_vip" jdbcType="INTEGER" property="isVip" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="format" jdbcType="VARCHAR" property="format" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, actor, cata_log_name, cata_log_id, evaluation, image, is_use, loc_name, loc_id, 
+    `name`, on_decade, plot, link,resolution, `status`, sub_class_name, sub_class_id,
+update_time, is_vip, create_by, create_time, update_by, remark,format
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_bus_film
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_bus_film
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ly.vrps.common.model.TBusFilm">
+    insert into t_bus_film (id,actor, cata_log_name, cata_log_id,
+      evaluation, image, is_use, 
+      loc_name, loc_id, `name`, 
+      on_decade, plot, resolution, 
+      `status`, sub_class_name, sub_class_id, update_time,
+      is_vip, create_by, create_time, 
+      update_by, remark,link,format)
+    values (#{id,jdbcType=VARCHAR}, #{actor,jdbcType=VARCHAR}, #{cataLogName,jdbcType=VARCHAR}, #{cataLogId,jdbcType=VARCHAR},
+      #{evaluation,jdbcType=DOUBLE}, #{image,jdbcType=VARCHAR}, #{isUse,jdbcType=INTEGER}, 
+      #{locName,jdbcType=VARCHAR}, #{locId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{onDecade,jdbcType=VARCHAR}, #{plot,jdbcType=VARCHAR}, #{resolution,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{subClassName,jdbcType=VARCHAR}, #{subClassId,jdbcType=VARCHAR}, 
+       #{updateTime,jdbcType=TIMESTAMP},#{isVip,jdbcType=INTEGER}, #{createBy,jdbcType=VARCHAR},
+            #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR},
+            #{remark,jdbcType=VARCHAR},#{link,jdbcType=VARCHAR},#{format,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ly.vrps.common.model.TBusFilm" useGeneratedKeys="true">
+    insert into t_bus_film
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="actor != null">
+        actor,
+      </if>
+      <if test="cataLogName != null">
+        cata_log_name,
+      </if>
+      <if test="cataLogId != null">
+        cata_log_id,
+      </if>
+      <if test="evaluation != null">
+        evaluation,
+      </if>
+      <if test="image != null">
+        image,
+      </if>
+      <if test="isUse != null">
+        is_use,
+      </if>
+      <if test="locName != null">
+        loc_name,
+      </if>
+      <if test="locId != null">
+        loc_id,
+      </if>
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="onDecade != null">
+        on_decade,
+      </if>
+      <if test="plot != null">
+        plot,
+      </if>
+      <if test="resolution != null">
+        resolution,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="subClassName != null">
+        sub_class_name,
+      </if>
+      <if test="subClassId != null">
+        sub_class_id,
+      </if>
+      <if test="typeName != null">
+        type_name,
+      </if>
+      <if test="typeId != null">
+        type_id,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="isVip != null">
+        is_vip,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateBy != null">
+        update_by,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="actor != null">
+        #{actor,jdbcType=VARCHAR},
+      </if>
+      <if test="cataLogName != null">
+        #{cataLogName,jdbcType=VARCHAR},
+      </if>
+      <if test="cataLogId != null">
+        #{cataLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="evaluation != null">
+        #{evaluation,jdbcType=DOUBLE},
+      </if>
+      <if test="image != null">
+        #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="isUse != null">
+        #{isUse,jdbcType=INTEGER},
+      </if>
+      <if test="locName != null">
+        #{locName,jdbcType=VARCHAR},
+      </if>
+      <if test="locId != null">
+        #{locId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="onDecade != null">
+        #{onDecade,jdbcType=VARCHAR},
+      </if>
+      <if test="plot != null">
+        #{plot,jdbcType=VARCHAR},
+      </if>
+      <if test="resolution != null">
+        #{resolution,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="subClassName != null">
+        #{subClassName,jdbcType=VARCHAR},
+      </if>
+      <if test="subClassId != null">
+        #{subClassId,jdbcType=VARCHAR},
+      </if>
+      <if test="typeName != null">
+        #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="typeId != null">
+        #{typeId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isVip != null">
+        #{isVip,jdbcType=INTEGER},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=DATE},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ly.vrps.common.model.TBusFilm">
+    update t_bus_film
+    <set>
+      <if test="actor != null">
+        actor = #{actor,jdbcType=VARCHAR},
+      </if>
+      <if test="cataLogName != null">
+        cata_log_name = #{cataLogName,jdbcType=VARCHAR},
+      </if>
+      <if test="cataLogId != null">
+        cata_log_id = #{cataLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="evaluation != null">
+        evaluation = #{evaluation,jdbcType=DOUBLE},
+      </if>
+      <if test="image != null">
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="isUse != null">
+        is_use = #{isUse,jdbcType=INTEGER},
+      </if>
+      <if test="locName != null">
+        loc_name = #{locName,jdbcType=VARCHAR},
+      </if>
+      <if test="locId != null">
+        loc_id = #{locId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="onDecade != null">
+        on_decade = #{onDecade,jdbcType=VARCHAR},
+      </if>
+      <if test="plot != null">
+        plot = #{plot,jdbcType=VARCHAR},
+      </if>
+      <if test="resolution != null">
+        resolution = #{resolution,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="subClassName != null">
+        sub_class_name = #{subClassName,jdbcType=VARCHAR},
+      </if>
+      <if test="subClassId != null">
+        sub_class_id = #{subClassId,jdbcType=VARCHAR},
+      </if>
+      <if test="typeName != null">
+        type_name = #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="typeId != null">
+        type_id = #{typeId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isVip != null">
+        is_vip = #{isVip,jdbcType=INTEGER},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=DATE},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ly.vrps.common.model.TBusFilm">
+    update t_bus_film
+    set actor = #{actor,jdbcType=VARCHAR},
+      cata_log_name = #{cataLogName,jdbcType=VARCHAR},
+      cata_log_id = #{cataLogId,jdbcType=VARCHAR},
+      image = #{image,jdbcType=VARCHAR},
+      loc_name = #{locName,jdbcType=VARCHAR},
+      loc_id = #{locId,jdbcType=VARCHAR},
+      `name` = #{name,jdbcType=VARCHAR},
+      on_decade = #{onDecade,jdbcType=VARCHAR},
+      plot = #{plot,jdbcType=VARCHAR},
+      resolution = #{resolution,jdbcType=VARCHAR},
+      `status` = #{status,jdbcType=VARCHAR},
+      sub_class_name = #{subClassName,jdbcType=VARCHAR},
+      sub_class_id = #{subClassId,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_vip = #{isVip,jdbcType=INTEGER},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      link = #{link,jdbcType=VARCHAR},
+      format = #{format,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+
+  <select id="dataGrid" resultMap="BaseResultMap">
+    select   id, actor, cata_log_name, cata_log_id, evaluation, image, is_use, loc_name, loc_id,
+             `name`, on_decade, plot, link,resolution, `status`, sub_class_name, sub_class_id, type_name,
+             type_id, update_time, is_vip, create_by, create_time, update_by, remark,format from t_bus_film
+    where 1=1
+    <if test="film.name != null and film.name != ''">
+      and name like concat('%',#{film.name},'%')
+    </if>
+    <if test="film.cataLogId != null and film.cataLogId != ''">
+      and cata_log_id = #{film.cataLogId}
+    </if>
+  </select>
+
+  <delete id="batchDelete">
+    delete from t_bus_film where 1=1 and id in
+    <foreach collection="idArr" item="id" separator="," open="(" close=")">
+      #{id}
+    </foreach>
+  </delete>
+
+  <select id="getKey" resultType="java.lang.String">
+    select  a.`key` from t_bus_key a
+  </select>
+
+</mapper>

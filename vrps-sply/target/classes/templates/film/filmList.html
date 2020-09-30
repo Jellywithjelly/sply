@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>filmList页面</title>
+    <!--导入layui css文件-->
+    <link rel="stylesheet" href="/static/plugins/layui/css/layui.css">
+    <!--导入layui js文件-->
+    <script type="text/javascript" src="/static/plugins/layui/layui.js"></script>
+
+    <!--导入Jquery-->
+    <script type="text/javascript" src="/static/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.serializejson.js"></script>
+</head>
+<body>
+<div class="layui-fluid" style="padding: 10px">
+    <div class="layui-card">
+        <form class="layui-form layui-card-header layuiadmin-card-header-auto hfits-search-area" id="collectLog">
+            <div class="layui-row layui-col-space10">
+                <div class="layui-input-inline">
+                    <label class="layui-form-label">片名</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="name"  autocomplete="off" placeholder="请输入片名"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-input-inline">
+                    <label class="layui-form-label">目录</label>
+                    <div class="layui-inline" style="width: 180px">
+                       <select  id="cataLogId" name="cataLogId">
+                            <option value="">全部</option>
+                            <option th:each="item : ${cataLogs}" th:value="${item.id}" th:text="${item.name}"></option>
+                       </select>
+                    </div>
+                    <span>&nbsp;&nbsp;</span>
+                    <span id="submitBt" class="layui-btn layui-btn-normal" lay-submit lay-filter="search">
+                            <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>查询
+                        </span>
+                    <span id="clear" class="layui-btn layui-btn-primary" lay-submit lay-filter="refresh">
+                            <i class="layui-icon layui-icon-refresh layuiadmin-button-btn"></i>重置
+                        </span>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-xs12 layui-col-sm12 layui-col-md12">
+            <div class="layui-card">
+                <table id="resList" lay-filter="resList" style="border:1px solid #ddd; "></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="toolBar">
+    <button type="button" lay-event="add" class="layui-btn layui-btn-normal layui-btn-sm">
+        <i class="layui-icon layui-icon-add-1"></i>增加
+    </button>
+
+    <button type="button" lay-event="edit" class="layui-btn layui-btn-normal layui-btn-sm">
+        <i class="layui-icon layui-icon-edit"></i>编辑
+    </button>
+
+    <button type="button" lay-event="del" class="layui-btn layui-btn-normal layui-btn-sm">
+        <i class="layui-icon layui-icon-delete"></i>删除
+    </button>
+</script>
+<script>
+
+    layui.config({
+        base: '/static/plugins/layui/lay/modules/'
+    }).extend({}).use(['table', 'layer', 'form', 'laydate'], function () {
+        var form = layui.form;
+        var laydate = layui.laydate
+            , $ = layui.$
+            , table = layui.table
+            , layer = layui.layer;
+        table.render({
+            elem: '#resList',   //指定表格元素
+            url: '/film/dataGrid',  //请求地址
+            height: 'full-100',
+            toolbar: '#toolBar', //开启头部工具栏，并为其绑定左侧模板
+            defaultToolbar: [],
+            method: 'post',     //提交方式 默认:get请求
+            page: true,        ////开启分页true
+            id: 'resList',       //生成 Layui table 的标识 id,必须提供,用于后续操作
+            limit: 10,
+            cols: [
+                [
+                    {type: 'checkbox', align: 'center', field: 'id', width: '7%', title: '##'}
+                    , {field: 'name', align: 'center', title: '片名', width: '15%'}
+                    , {field: 'actor', align: 'center', title: '演员', width: '15%'}
+                    , {field: 'cataLogName', align: 'center', title: '目录', width: '15%'}
+                    , {field: 'subClassName', align: 'center', title: '类型', width: '15%'}
+                    , {field: 'locName', align: 'center', title: '地区', width: '9%'}
+                    , {field: 'isVip', align: 'center', title: 'isvip', width: '9%',templet:function (d) {
+                        if(d.isVip == '1'){
+                            return "是"
+                        }else {
+                            return "否";
+                        }
+                    }}
+                    , {field: 'updateTime', align: 'center', title: '操作时间', width: '15%',templet:function (d) {
+                        // 根据毫秒数构建 Date 对象
+                        const date = new Date(d.updateTime);
+                        // 格式化日期
+                        const  dateTime = date.getFullYear() +"年-"+ date.getMonth()+"月-" + date.getDay()+"日";
+                        return dateTime;
+                    }}
+                ]
+            ]
+        });
+        form.render();//表单渲染
+        //头工具栏事件
+        table.on('toolbar(resList)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch (obj.event) {
+                /**
+                 * 新增按钮
+                 */
+                case 'add':
+                    layer.open({
+                        type: 2,
+                        title: '新增',
+                        content: "/film/toadd",
+                        area: ['900px', '630px'],
+                        maxmin: true,
+                        btn: ['确定', '取消'],
+                        btnAlign: 'c',
+                        yes: function (index, layero) {
+                            // 获取iframe层的body
+                            var body = layer.getChildFrame('body', index);
+                            // 找到隐藏的提交按钮模拟点击提交
+                            body.find('#permissionSubmit').click();
+                        }
+                    });
+                    break;
+                /**
+                 * 修改按钮
+                 */
+                case 'edit':
+                    var data = checkStatus.data;
+                    if (data.length === 0 || data.length > 1) {
+                        layer.msg('请选择一行数据!');
+                    } else {
+                        layer.open({
+                            type: 2,
+                            title: '编辑资源',
+                            content: "/film/toUpdate?id=" + data[0].id,
+                            area: ['900px', '630px'],
+                            maxmin: true,
+                            btn: ['确定', '取消'],
+                            btnAlign: 'c',
+                            yes: function (index, layero) {
+                                // 获取iframe层的body
+                                var body = layer.getChildFrame('body', index);
+                                // 找到隐藏的提交按钮模拟点击提交
+                                body.find('#permissionSubmit').click();
+                            }
+                        });
+                    }
+                    break;
+
+                case 'del' :
+                    var data = checkStatus.data;
+                    if (data.length == 0) {
+                        layer.msg('请选择一条数据!');
+                    } else {
+                        var id_array = [];
+                        for (var i = 0; i < data.length; ++i) {
+                            id_array.push(data[i]['id']);//向数组中添加元素
+                        }
+                        layer.confirm('确定删除吗？', {
+                            btn: ['确定', '取消']
+                        }, function (index, layero) {
+                            $.ajax({
+                                type: "POST",
+                                url: "/film/delete",
+                                data: {ids: id_array.join(',')},
+                                success: function (data) {
+                                    if (data.falg) {
+                                        layer.msg("删除成功!");
+                                        table.reload('resList');
+                                    } else {
+                                        layer.msg("删除失败!");
+                                    }
+                                },
+                                error: function () {
+                                    layer.alert("操作请求错误，请您稍后再试");
+                                }
+                            });
+                            /*关闭消息框*/
+                            layer.closeAll('dialog');
+                        });
+                    }
+                    break;
+            };
+        });
+
+
+
+        //菜单类型submit事件
+        form.on('submit(search)', function (data) {
+            var field = data.field;
+            //执行重载
+            table.reload('resList', {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+                , where: field
+            });
+        });
+        /*重置方法*/
+        form.on('submit(refresh)', function (data) {
+            $("input[type=text]").val("");
+            $("select").val("");
+            form.render();
+        });
+    });
+
+
+</script>
+
+</body>
+</html>
